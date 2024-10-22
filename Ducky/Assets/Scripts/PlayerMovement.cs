@@ -40,10 +40,12 @@ public class PlayerMovement : MonoBehaviour
     public string music2;
 
     FMOD.Studio.EventInstance musicIntance;
-    FMOD.Studio.ParameterInstance musicFade;
+    //FMOD.Studio.ParameterInstance musicFade;
+    float musicFade;
 
     FMOD.Studio.EventInstance athmoInstance;
-    FMOD.Studio.ParameterInstance overunder;
+    //FMOD.Studio.ParameterInstance overunder;
+    float overunder;
 
     private bool musicPlaying = false;
     private bool music2Playing = false;
@@ -57,14 +59,11 @@ public class PlayerMovement : MonoBehaviour
         duckSprites = Resources.LoadAll<Sprite>(spriteNames);
         sr.sprite = duckSprites[0];
         athmoInstance = FMODUnity.RuntimeManager.CreateInstance(athmo);
-        athmoInstance.getParameter("OverUnder", out overunder);
+        //athmoInstance.getParameter("OverUnder", out overunder);
         athmoInstance.start();
 
         musicIntance = FMODUnity.RuntimeManager.CreateInstance(music1);
-        musicIntance.getParameter("MusicFade", out musicFade);
-
-        
-
+        //musicIntance.getParameter("MusicFade", out musicFade);
 
 
     }
@@ -148,8 +147,8 @@ public class PlayerMovement : MonoBehaviour
 
             if (progress > 80 && progress < 85)
             {
-                musicFade.setValue((progress-80) / 5);
-
+                //musicFade.setValue((progress-80) / 5);
+                musicIntance.setParameterByName("MusicFade", 0);
             }
 
             if (progress > 95 && !music2Playing)
@@ -177,7 +176,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 cam.transform.position = new Vector3(cam.transform.position.x, f, cam.transform.position.z);
                 yield return null;
-                overunder.setValue(1);
+                //overunder.setValue(1);
+                athmoInstance.setParameterByName("OverUnder", 1);
                 
             }
             FMODUnity.RuntimeManager.PlayOneShotAttached(turn1, gameObject);
@@ -188,8 +188,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 cam.transform.position = new Vector3(cam.transform.position.x, f, cam.transform.position.z);
                 yield return null;
-                overunder.setValue(0);
-                
+                //overunder.setValue(0);
+                athmoInstance.setParameterByName("OverUnder", 0);
             }
             FMODUnity.RuntimeManager.PlayOneShotAttached(turn2, gameObject);
         }
